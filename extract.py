@@ -34,7 +34,8 @@ from collections import namedtuple, OrderedDict
 import zipfile
 import uuid
 from SortedCollection import SortedCollection
-from pdb import set_trace
+from pdb import set_trace, post_mortem
+import traceback
 from functools import total_ordering
 from fuzzywuzzy import process as fuzzy_process
 from bitstring import BitArray
@@ -1778,8 +1779,12 @@ class Word():
         try:
             fields = (s.field_by_name(fname),)  # one-element tuple
         except KeyError:
-            fields = tuple(s.match_field_name(fname))
-            vprint('{} matches {} fields: {}'.format(fname, len(fields), fields), min=1)
+            try:
+                fields = tuple(s.match_field_name(fname))
+                vprint('{} matches {} fields: {}'.format(fname, len(fields),
+                                                         fields), min=1)
+            except AttributeError:
+                fields = []
         if len(fields) == 0:
             print('No such field: from {}, in {}: "{}"'.format(
                 table, s, fname))
@@ -2454,6 +2459,8 @@ def main():
                         action='store_true')
     parser.add_argument('-k', '--keyboard', help='invoke interactive keyboard',
                         action='store_true')
+    parser.add_argument('-P', '--post_mortem', action='store_true',
+                        help='enter debugger on uncaught exception')
     global args
     args = parser.parse_args()
     out = open(args.xmlfile, 'wb') if args.xmlfile else sys.stdout
@@ -2506,4 +2513,11 @@ def main():
         keyboard()
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as post_err:
+        if args.post_mortem:
+            traceback.print_exc()
+            post_mortem()
+        else:
+            raise

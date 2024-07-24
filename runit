@@ -20,14 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-VERS=v1.1
+#VERS=v1.1c
+VERS=v1.1e
 #DATE=20191009
 DATE=""
 #SUFFIX="-draft"
 SUFFIX=""
 #OPTS=""
 #OPTS="-p pretty-${DATE}.xml $*"
-OPTS="-p pretty.xml $*"
+OPTS="-P -p pretty.xml $*"
 #INPUT="gen-z-spec-control-${DATE}${SUFFIX}.vsdx gen-z-spec-protocol-${DATE}${SUFFIX}.vsdx gen-z-core-specification-${VERS}-${DATE}${SUFFIX}.docx"
 INPUT="gen-z-spec-control.vsdx gen-z-spec-protocol.vsdx gen-z-core-specification-${VERS}.docx"
 OUTPUT="${VERS}.xml"
